@@ -168,7 +168,7 @@ uninstall_singbox() {
             [ -d "${HOME}/bin" ] && [ -z "$(ls -A "${HOME}/bin")" ] && rmdir "${HOME}/bin"
             sed -i '/export PATH="\$HOME\/bin:\$PATH"/d' "${HOME}/.bashrc" >/dev/null 2>&1
             source "${HOME}/.bashrc"
-	    clear
+	    
        	    green "Sing-box双协议已完全卸载"
           ;;
         [Nn]) exit 0 ;;

@@ -110,11 +110,7 @@ if [[ $tcp_ports -ne 1 || $udp_ports -ne 1 ]]; then
             green "已删除UDP端口: $port"
         done
     fi
-
-port_list=$(devil port list)
-tcp_ports=$(echo "$port_list" | grep -c "tcp")
-udp_ports=$(echo "$port_list" | grep -c "udp")
-    
+   
     if [[ $tcp_ports -lt 1 ]]; then
         while true; do
             tcp_port=$(shuf -i 10000-65535 -n 1) 
@@ -144,12 +140,14 @@ udp_ports=$(echo "$port_list" | grep -c "udp")
 else
     tcp_port=$(echo "$port_list" | awk '/tcp/ {print $1}' | sed -n '1p')
     udp_port=$(echo "$port_list" | awk '/udp/ {print $1}')
-
-    purple "当前TCP端口: $tcp_port"
-    purple "当前UDP端口: $udp_port"
+  
 fi
+purple "当前TCP端口: $tcp_port"
+purple "当前UDP端口: $udp_port"
+
 export vless_port=$tcp_port
 export hy2_port=$udp_port
+
 green "你的vless-reality端口: $vless_port"
 green "你的hysteria2端口: $hy2_port"
 }

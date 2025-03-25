@@ -439,7 +439,7 @@ fi
 
 get_links(){
 echo -e "\n"
-l_link="vless://$UUID@$IP:$vless_port?encryption=none&flow=xtls-rprx-vision&security=reality&sni=$reym&fp=chrome&pbk=$public_key&type=tcp&headerType=none#PL-$snb-reality"
+vl_link="vless://$UUID@$IP:$vless_port?encryption=none&flow=xtls-rprx-vision&security=reality&sni=$reym&fp=chrome&pbk=$public_key&type=tcp&headerType=none#PL-$snb-reality"
 echo "$vl_link" > jh.txt
 hy2_link="hysteria2://$UUID@$IP:$hy2_port?sni=www.bing.com&alpn=h3&insecure=1#PL-$snb-hy2"
 echo "$hy2_link" >> jh.txt
@@ -953,6 +953,83 @@ red "未安装脚本，请选择1进行安装" && exit
 fi
 }
 
+install_keepalive () {
+    clear
+    reading "是否需要Telegram通知？(直接回车则不启用)【y/n】: " tg_notification
+    if [[ "$tg_notification" == "y" || "$tg_notification" == "Y" ]]; then
+
+        reading "请输入Telegram chat ID (tg上@userinfobot获取): " tg_chat_id
+        [[ -z $tg_chat_id ]] && { red "Telegram chat ID不能为空"; return; }
+        green "你设置的Telegram chat_id为: ${tg_chat_id}"
+
+        reading "请输入Telegram Bot Token (tg上@Botfather创建bot后获取): " tg_token
+        [[ -z $tg_token ]] && { red "Telegram Bot Token不能为空"; return; }
+        green "你设置的Telegram bot token为: ${tg_token}"
+    fi
+
+    reading "是否需要保活哪吒探针？(直接回车则不启用)【y/n】: " keep_nezha
+    if [[ "$keep_nezha" == "y" || "$keep_nezha" == "Y" ]]; then
+        reading "请输入哪吒面板域名【v1须带面板端口】：" nezha_server
+        green "你的哪吒面板域名为: $nezha_server"
+
+        if [[ "$nezha_server" != *":"* ]]; then
+          reading "请输入哪吒agent端口(v1请直接回车留空): " nezha_port
+          [[ -z $nezha_port ]] && nezha_port="5555"
+          green "你的哪吒agent端口为: $nezha_port"
+        else
+          nezha_port=""
+        fi
+
+        reading "请输入哪吒v0的agent密钥或v1的NZ_CLIENT_SECRET: " nezha_key
+        [[ -z $nezha_key ]] && { red "哪吒agent密钥不能为空"; return; }
+        green "你的哪吒agent密钥为: $nezha_key"
+    fi
+
+    purple "正在安装保活服务中,请稍等......"
+    keep_path="$HOME/domains/keep.${USERNAME}.serv00.net/public_nodejs"
+    [ -d "$keep_path" ] || mkdir -p "$keep_path"
+    app_file_url="https://sb3.ssss.nyc.mn/app.js"
+    $COMMAND "${keep_path}/app.js" "$app_file_url"
+
+    cat > ${keep_path}/.env <<EOF
+UUID=${UUID}
+SUB_TOKEN=${SUB_TOKEN}
+${UPLOAD_URL:+API_SUB_URL=$UPLOAD_URL}
+${tg_chat_id:+TELEGRAM_CHAT_ID=$tg_chat_id}
+${tg_token:+TELEGRAM_BOT_TOKEN=$tg_token}
+${nezha_server:+NEZHA_SERVER=$nezha_server}
+${nezha_port:+NEZHA_PORT=$nezha_port}
+${nezha_key:+NEZHA_KEY=$nezha_key}
+EOF
+    devil www add keep.${USERNAME}.serv00.net nodejs /usr/local/bin/node18 > /dev/null 2>&1
+    # devil ssl www add $available_ip le le keep.${USERNAME}.serv00.net > /dev/null 2>&1
+    ln -fs /usr/local/bin/node18 ~/bin/node > /dev/null 2>&1
+    ln -fs /usr/local/bin/npm18 ~/bin/npm > /dev/null 2>&1
+    mkdir -p ~/.npm-global
+    npm config set prefix '~/.npm-global'
+    echo 'export PATH=~/.npm-global/bin:~/bin:$PATH' >> $HOME/.bash_profile && source $HOME/.bash_profile
+    rm -rf $HOME/.npmrc > /dev/null 2>&1
+    cd ${keep_path} && npm install dotenv axios --silent > /dev/null 2>&1
+    rm $HOME/domains/keep.${USERNAME}.serv00.net/public_nodejs/public/index.html > /dev/null 2>&1
+    # devil www options keep.${USERNAME}.serv00.net sslonly on > /dev/null 2>&1
+    generate_sub_link
+    devil www restart keep.${USERNAME}.serv00.net > /dev/null 2>&1
+    if curl -skL "http://keep.${USERNAME}.serv00.net/start" | grep -q "running"; then
+        green "\n全自动保活服务安装成功\n"
+	    green "所有服务都运行正常,全自动保活任务添加成功\n\n"
+        purple "访问 http://keep.${USERNAME}.serv00.net/stop 结束进程\n"
+        purple "访问 http://keep.${USERNAME}.serv00.net/list 全部进程列表\n"
+        yellow "访问 http://keep.${USERNAME}.serv00.net/start 调起保活程序\n"
+        purple "访问 http://keep.${USERNAME}.serv00.net/status 查看进程状态\n\n"
+        purple "如果需要TG通知,在${yellow}https://t.me/laowang_serv00_bot${re}${purple}获取CHAT_ID,并带CHAT_ID环境变量运行${re}\n\n"
+        quick_command
+    else
+        red "\n全自动保活服务安装失败,存在未运行的进程\n访问 ${yellow}http://keep.${USERNAME}.serv00.net/status ${red}检查,建议执行以下命令后重装: \n\ndevil www del ${USERNAME}.serv00.net\ndevil www del keep.${USERNAME}.serv00.net\nrm -rf $HOME/domains/*\nshopt -s extglob dotglob\nrm -rf $HOME/!(domains|mail|repo|backups)\n\n${re}"
+    fi
+}
+
+
+
 menu() {
    clear
    echo "============================================================"
@@ -971,6 +1048,8 @@ menu() {
    yellow "7. 重置并随机生成新端口 (脚本安装前后都可执行)"
    echo   "------------------------------------------------------------"
    yellow "8. 清理所有服务进程与文件 (系统初始化)"
+   echo   "------------------------------------------------------------"
+   green  "9. 安装TG提醒全自动保活"
    echo   "------------------------------------------------------------"
    red    "0. 退出脚本"
    echo   "============================================================"
@@ -1041,13 +1120,14 @@ fi
     case "${choice}" in
         1) install_singbox ;;
         2) uninstall_singbox ;; 
-	    3) resservsb ;;
-	    4) fastrun && green "脚本已更新成功" && sleep 2 && sb ;; 
+	3) resservsb ;;
+	4) fastrun && green "脚本已更新成功" && sleep 2 && sb ;; 
         5) showlist ;;
-	    6) showsbclash ;;
+	6) showsbclash ;;
         7) resallport ;;
         8) kill_all_tasks ;;
-	    0) exit 0 ;;
+	8) install_keepalive ;;
+	0) exit 0 ;;
         *) red "无效的选项，请输入 0 到 8" ;;
     esac
 }

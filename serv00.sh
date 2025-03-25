@@ -111,6 +111,10 @@ if [[ $tcp_ports -ne 1 || $udp_ports -ne 1 ]]; then
         done
     fi
 
+port_list=$(devil port list)
+tcp_ports=$(echo "$port_list" | grep -c "tcp")
+udp_ports=$(echo "$port_list" | grep -c "udp")
+    
     if [[ $tcp_ports -lt 1 ]]; then
         while true; do
             tcp_port=$(shuf -i 10000-65535 -n 1) 

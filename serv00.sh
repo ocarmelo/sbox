@@ -1069,17 +1069,6 @@ echo -e "$portlist"
 else
 yellow "未设置端口"
 fi
-echo
-insV=$(cat $WORKDIR/v 2>/dev/null)
-latestV=$(curl -sL https://raw.githubusercontent.com/fjnpzh/sing-box-yg/main/sversion | awk -F "更新内容" '{print $1}' | head -n 1)
-if [ -f $WORKDIR/v ]; then
-if [ "$insV" = "$latestV" ]; then
-echo -e "当前 Serv01-sb-yg 脚本最新版：${purple}${insV}${re} (已安装)"
-else
-echo -e "当前 Serv00-sb-yg 脚本版本号：${purple}${insV}${re}"
-echo -e "检测到最新 Serv01-sb-yg 脚本版本号：${yellow}${latestV}${re} (可选择4进行更新)"
-echo -e "${yellow}$(curl -sL https://raw.githubusercontent.com/fjnpzh/sing-box-yg/main/sversion)${re}"
-fi
 echo -e "========================================================="
 sbb=$(cat $WORKDIR/sb.txt 2>/dev/null)
 showuuid=$(jq -r '.inbounds[0].users[0].password' $WORKDIR/config.json 2>/dev/null)
@@ -1096,7 +1085,7 @@ else
 yellow "未安装 Serv00 脚本！请选择 1 安装"
 fi
    echo -e "========================================================="
-   reading "请输入选择【0-8】: " choice
+   reading "请输入选择【0-9】: " choice
    echo
     case "${choice}" in
         1) install_singbox ;;
@@ -1107,7 +1096,7 @@ fi
 	6) showsbclash ;;
         7) resallport ;;
         8) kill_all_tasks ;;
-	8) install_keepalive ;;
+	9) install_keepalive ;;
 	0) exit 0 ;;
         *) red "无效的选项，请输入 0 到 8" ;;
     esac

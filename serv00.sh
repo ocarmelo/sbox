@@ -132,9 +132,9 @@ if [[ $tcp_ports -ne 1 || $udp_ports -ne 1 ]]; then
         done
     fi
     green "端口已调整完成,将断开ssh连接,请重新连接shh重新执行脚本"
-
     devil binexec on >/dev/null 2>&1
     kill -9 $(ps -o ppid= -p $$) >/dev/null 2>&1
+    sleep 3
 else
     tcp_port=$(echo "$port_list" | awk '/tcp/ {print $1}' | sed -n '1p')
     udp_port=$(echo "$port_list" | awk '/udp/ {print $1}')

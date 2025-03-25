@@ -804,7 +804,7 @@ $V2rayN_LINK
 $baseurl
 -------------------------------------------------------------------------------------------------
 
-四、查看Sing-box与Clash-meta的订阅配置文件，请进入主菜单选择4
+四、查看Sing-box与Clash-meta的订阅配置文件，请进入主菜单选择6
 
 Clash-meta订阅分享链接：
 $Clashmeta_LINK
@@ -1031,13 +1031,13 @@ fi
     case "${choice}" in
         1) install_singbox ;;
         2) uninstall_singbox ;; 
-	    3) resservsb ;;
-	    4) fastrun && green "脚本已更新成功" && sleep 2 && sb ;; 
+	3) resservsb ;;
+	4) fastrun && green "脚本已更新成功" && sleep 2 && sb ;; 
         5) showlist ;;
-	    6) showsbclash ;;
+	6) showsbclash ;;
         7) resallport ;;
         8) kill_all_tasks ;;
-	    0) exit 0 ;;
+	0) exit 0 ;;
         *) red "无效的选项，请输入 0 到 8" ;;
     esac
 }

@@ -38,7 +38,6 @@ fi
 fi
 green "你选择的IP为: $IP"
 }
-
 read_uuid() {
         reading "请输入统一的uuid密码 (建议回车默认随机): " UUID
         if [[ -z "$UUID" ]]; then
@@ -47,7 +46,6 @@ read_uuid() {
         fi
 	green "你的uuid为: $UUID"
 }
-
 read_reym() {
 	yellow "方式一：(推荐)使用Serv00自带域名，不支持proxyip功能：输入回车"
         yellow "方式二：支持其他域名，注意要符合reality域名规则：输入域名"
@@ -57,7 +55,6 @@ read_reym() {
         fi
 	green "你的reality域名为: $reym"
 }
-
 resallport(){
 portlist=$(devil port list | grep -E '^[0-9]+[[:space:]]+[a-zA-Z]+' | sed 's/^[[:space:]]*//')
 if [[ -z "$portlist" ]]; then
@@ -86,12 +83,10 @@ green "端口替换完成！"
 ps aux | grep '[r]un -c con' > /dev/null && green "主进程启动成功，单节点用户修改下客户端协议端口，订阅链接用户更新下订阅即可" || yellow "Sing-box主进程启动失败，再次重置端口或者多刷几次保活网页，可能会自动恢复"
 fi
 }
-
 check_port () {
 port_list=$(devil port list)
 tcp_ports=$(echo "$port_list" | grep -c "tcp")
 udp_ports=$(echo "$port_list" | grep -c "udp")
-
 if [[ $tcp_ports -ne 1 || $udp_ports -ne 1 ]]; then
     red "端口数量不符合要求，正在调整..."
 
@@ -136,18 +131,18 @@ if [[ $tcp_ports -ne 1 || $udp_ports -ne 1 ]]; then
             fi
         done
     fi
-    sleep 3
+    green "端口已调整完成,将断开ssh连接,请重新连接shh重新执行脚本"
+
+    devil binexec on >/dev/null 2>&1
+    kill -9 $(ps -o ppid= -p $$) >/dev/null 2>&1
 else
     tcp_port=$(echo "$port_list" | awk '/tcp/ {print $1}' | sed -n '1p')
     udp_port=$(echo "$port_list" | awk '/udp/ {print $1}')
-  
+    purple "当前TCP端口: $tcp_port"
+    purple "当前UDP端口: $udp_port"
 fi
-purple "当前TCP端口: $tcp_port"
-purple "当前UDP端口: $udp_port"
-
 export vless_port=$tcp_port
 export hy2_port=$udp_port
-
 green "你的vless-reality端口: $vless_port"
 green "你的hysteria2端口: $hy2_port"
 }

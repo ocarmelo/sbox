@@ -1011,7 +1011,7 @@ yellow "未设置端口"
 fi
 echo
 
-if  [[ -e $WORKDIR/list.txt ]]; then
+if  [[ -e $WORKDIR/ip.txt ]]; then
 echo -e "========================================================="
 sbb=$(cat $WORKDIR/sb.txt 2>/dev/null)
 showuuid=$(jq -r '.inbounds[0].users[0].password' $WORKDIR/config.json 2>/dev/null)

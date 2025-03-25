@@ -995,7 +995,7 @@ EOF
         yellow "访问 http://keep.${USERNAME}.serv00.net/start 调起保活程序\n"
         purple "访问 http://keep.${USERNAME}.serv00.net/status 查看进程状态\n\n"
         purple "如果需要TG通知,在${yellow}https://t.me/laowang_serv00_bot${re}${purple}获取CHAT_ID,并带CHAT_ID环境变量运行${re}\n\n"
-        quick_command
+
     else
         red "\n全自动保活服务安装失败,存在未运行的进程\n访问 ${yellow}http://keep.${USERNAME}.serv00.net/status ${red}检查,建议执行以下命令后重装: \n\ndevil www del ${USERNAME}.serv00.net\ndevil www del keep.${USERNAME}.serv00.net\nrm -rf $HOME/domains/*\nshopt -s extglob dotglob\nrm -rf $HOME/!(domains|mail|repo|backups)\n\n${re}"
     fi

@@ -83,7 +83,7 @@ sleep 1
 curl -sk "http://${snb}.${USERNAME}.serv00.net/up" > /dev/null 2>&1
 sleep 5
 green "端口替换完成！"
-ps aux | grep '[r]un -c con' > /dev/null && green "主进程启动成功，单节点用户修改下客户端三协议端口，订阅链接用户更新下订阅即可" || yellow "Sing-box主进程启动失败，再次重置端口或者多刷几次保活网页，可能会自动恢复"
+ps aux | grep '[r]un -c con' > /dev/null && green "主进程启动成功，单节点用户修改下客户端协议端口，订阅链接用户更新下订阅即可" || yellow "Sing-box主进程启动失败，再次重置端口或者多刷几次保活网页，可能会自动恢复"
 fi
 }
 
@@ -117,7 +117,6 @@ if [[ $tcp_ports -ne 1 || $udp_ports -ne 1 ]]; then
             result=$(devil port add tcp $tcp_port 2>&1)
             if [[ $result == *"succesfully"* ]]; then
                 green "已添加TCP端口: $tcp_port"
-                tcp_port1=$tcp_port
                 break
             else
                 yellow "端口 $tcp_port 不可用，尝试其他端口..."
@@ -139,13 +138,13 @@ if [[ $tcp_ports -ne 1 || $udp_ports -ne 1 ]]; then
     fi
     sleep 3
 else
-    tcp_port1=$(echo "$port_list" | awk '/tcp/ {print $1}' | sed -n '1p')
+    tcp_port=$(echo "$port_list" | awk '/tcp/ {print $1}' | sed -n '1p')
     udp_port=$(echo "$port_list" | awk '/udp/ {print $1}')
 
-    purple "当前TCP端口: $tcp_port1"
+    purple "当前TCP端口: $tcp_port"
     purple "当前UDP端口: $udp_port"
 fi
-export vless_port=$tcp_port1
+export vless_port=$tcp_port
 export hy2_port=$udp_port
 green "你的vless-reality端口: $vless_port"
 green "你的hysteria2端口: $hy2_port"
@@ -847,7 +846,7 @@ fi
 
 servkeep() {
 
-green "强制IP值：$IP"
+green "客户端使用的IP地址：$IP"
 
 sed -i '' -e "14s|''|'$UUID'|" serv00keep.sh
 sed -i '' -e "17s|''|'$vless_port'|" serv00keep.sh
@@ -977,9 +976,6 @@ SUB_TOKEN=${SUB_TOKEN}
 ${UPLOAD_URL:+API_SUB_URL=$UPLOAD_URL}
 ${tg_chat_id:+TELEGRAM_CHAT_ID=$tg_chat_id}
 ${tg_token:+TELEGRAM_BOT_TOKEN=$tg_token}
-${nezha_server:+NEZHA_SERVER=$nezha_server}
-${nezha_port:+NEZHA_PORT=$nezha_port}
-${nezha_key:+NEZHA_KEY=$nezha_key}
 EOF
     devil www add keep.${USERNAME}.serv00.net nodejs /usr/local/bin/node18 > /dev/null 2>&1
     # devil ssl www add $available_ip le le keep.${USERNAME}.serv00.net > /dev/null 2>&1
@@ -1044,7 +1040,7 @@ while IFS='|' read -r ip status; do
 if [[ $status == "Accessible" ]]; then
 echo "$ip: 可用" >> $WORKDIR/ip.txt
 else
-echo "$ip: 被墙 (Argo与CDN回源节点、proxyip依旧有效)" >> $WORKDIR/ip.txt
+echo "$ip: 被墙" >> $WORKDIR/ip.txt
 fi	
 done <<< "$response"
 fi

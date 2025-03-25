@@ -1069,6 +1069,17 @@ echo -e "$portlist"
 else
 yellow "未设置端口"
 fi
+echo
+insV=$(cat $WORKDIR/v 2>/dev/null)
+latestV=$(curl -sL https://raw.githubusercontent.com/fjnpzh/sing-box-yg/main/sversion | awk -F "更新内容" '{print $1}' | head -n 1)
+if [ -f $WORKDIR/v ]; then
+if [ "$insV" = "$latestV" ]; then
+echo -e "当前 Serv01-sb-yg 脚本最新版：${purple}${insV}${re} (已安装)"
+else
+echo -e "当前 Serv00-sb-yg 脚本版本号：${purple}${insV}${re}"
+echo -e "检测到最新 Serv01-sb-yg 脚本版本号：${yellow}${latestV}${re} (可选择4进行更新)"
+echo -e "${yellow}$(curl -sL https://raw.githubusercontent.com/fjnpzh/sing-box-yg/main/sversion)${re}"
+fi
 echo -e "========================================================="
 sbb=$(cat $WORKDIR/sb.txt 2>/dev/null)
 showuuid=$(jq -r '.inbounds[0].users[0].password' $WORKDIR/config.json 2>/dev/null)

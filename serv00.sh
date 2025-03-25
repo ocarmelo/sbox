@@ -958,7 +958,7 @@ fi
 menu() {
    clear
    echo "============================================================"
-   green  "1. 一键安装 sing-box"
+   green  "1. 一键安装 sing-box及保活"
    echo   "------------------------------------------------------------"
    red    "2. 卸载删除 sing-box"
    echo   "------------------------------------------------------------"
@@ -988,7 +988,7 @@ while IFS='|' read -r ip status; do
 if [[ $status == "Accessible" ]]; then
 echo "$ip: 可用" >> $WORKDIR/ip.txt
 else
-echo "$ip: 被墙 (Argo与CDN回源节点、proxyip依旧有效)" >> $WORKDIR/ip.txt
+echo "$ip: 被墙" >> $WORKDIR/ip.txt
 fi	
 done <<< "$response"
 fi
@@ -1014,7 +1014,6 @@ fi
 echo
 
 if [ -f $WORKDIR/v ]; then
-
 echo -e "========================================================="
 sbb=$(cat $WORKDIR/sb.txt 2>/dev/null)
 showuuid=$(jq -r '.inbounds[0].users[0].password' $WORKDIR/config.json 2>/dev/null)

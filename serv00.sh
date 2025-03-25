@@ -851,7 +851,7 @@ fi
 
 servkeep() {
 
-green "强制IP值：$IP"
+green "客户端使用的IP地址：$IP"
 
 sed -i '' -e "14s|''|'$UUID'|" serv00keep.sh
 sed -i '' -e "17s|''|'$vless_port'|" serv00keep.sh
@@ -1046,7 +1046,7 @@ while IFS='|' read -r ip status; do
 if [[ $status == "Accessible" ]]; then
 echo "$ip: 可用" >> $WORKDIR/ip.txt
 else
-echo "$ip: 被墙 (Argo与CDN回源节点、proxyip依旧有效)" >> $WORKDIR/ip.txt
+echo "$ip: 被墙" >> $WORKDIR/ip.txt
 fi	
 done <<< "$response"
 fi
@@ -1076,6 +1076,9 @@ if pgrep -x "$sbb" > /dev/null; then
 green "Sing-box主进程运行正常"
 green "UUID密码：$showuuid" 
 green "当前使用IP：$IP" 
+else
+yellow "Sing-box主进程启动失败，尝试运行下保活网页、重启、重置端口"
+fi
 green "多功能主页如下 (支持保活、重启、重置端口、节点查询)"
 purple "http://${snb}.${USERNAME}.serv00.net"
 else

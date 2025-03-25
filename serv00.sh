@@ -902,12 +902,6 @@ okip(){
     echo "$IP"
     }
 
-keeplive() {
-curl -sSL https://raw.githubusercontent.com/ocarmelo/sbox/main/keep.sh -o keep.sh  && chmod +x keep.sh
-    bash keep.sh
-  green "保活已启动" && sleep 2
-}
-
 fastrun(){
 if [[ -e $WORKDIR/config.json ]]; then
   COMMAND="sb"

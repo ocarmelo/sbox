@@ -87,7 +87,7 @@ sleep 1
 curl -sk "http://${snb}.${USERNAME}.serv00.net/up" > /dev/null 2>&1
 sleep 5
 green "端口替换完成！"
-ps aux | grep '[r]un -c con' > /dev/null && green "主进程启动成功，单节点用户修改下客户端三协议端口，订阅链接用户更新下订阅即可" || yellow "Sing-box主进程启动失败，再次重置端口或者多刷几次保活网页，可能会自动恢复"
+ps aux | grep '[r]un -c con' > /dev/null && green "主进程启动成功，单节点用户修改下客户端协议端口，订阅链接用户更新下订阅即可" || yellow "Sing-box主进程启动失败，再次重置端口或者多刷几次保活网页，可能会自动恢复"
 fi
 }
 
@@ -1011,7 +1011,7 @@ yellow "未设置端口"
 fi
 echo
 
-if  [[ -e $WORKDIR/ip.txt ]]; then
+if  [[ -e $WORKDIR/list.txt ]]; then
 echo -e "========================================================="
 sbb=$(cat $WORKDIR/sb.txt 2>/dev/null)
 showuuid=$(jq -r '.inbounds[0].users[0].password' $WORKDIR/config.json 2>/dev/null)

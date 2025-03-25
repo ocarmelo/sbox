@@ -1078,6 +1078,8 @@ green "UUID密码：$showuuid"
 green "当前使用IP：$IP" 
 green "多功能主页如下 (支持保活、重启、重置端口、节点查询)"
 purple "http://${snb}.${USERNAME}.serv00.net"
+else
+yellow "未安装 Serv00 脚本！请选择 1 安装"
 fi
    echo -e "========================================================="
    reading "请输入选择【0-9】: " choice

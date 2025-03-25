@@ -27,7 +27,7 @@ USERNAME=$(whoami | tr '[:upper:]' '[:lower:]')
 HOSTNAME=$(hostname)
 snb=$(hostname | awk -F '.' '{print $1}')
 
-green "强制IP值：$IP"
+green "客户端使用的IP地址：$IP"
 
 snbok=$(hostname | awk -F '.' '{print $1}')
 snb=$USERNAME
@@ -131,7 +131,7 @@ port_list=$(devil port list)
 tcp_ports=$(echo "$port_list" | grep -c "tcp")
 udp_ports=$(echo "$port_list" | grep -c "udp")
 
-if [[ $tcp_ports -ne 2 || $udp_ports -ne 1 ]]; then
+if [[ $tcp_ports -ne 1 || $udp_ports -ne 1 ]]; then
     echo "端口数量不符合要求，正在调整..."
 
     if [[ $tcp_ports -gt 2 ]]; then
@@ -156,7 +156,6 @@ if [[ $tcp_ports -ne 2 || $udp_ports -ne 1 ]]; then
             result=$(devil port add tcp $tcp_port 2>&1)
             if [[ $result == *"succesfully"* ]]; then
                 echo "已添加TCP端口: $tcp_port"
-                tcp_port1=$tcp_port
                 break
             else
                 echo "端口 $tcp_port 不可用，尝试其他端口..."
@@ -182,15 +181,13 @@ if [[ $tcp_ports -ne 2 || $udp_ports -ne 1 ]]; then
     #kill -9 $(ps -o ppid= -p $$) >/dev/null 2>&1
 else
     tcp_ports=$(echo "$port_list" | awk '/tcp/ {print $1}')
-    tcp_port1=$(echo "$tcp_ports" | sed -n '1p')
-    tcp_port2=$(echo "$tcp_ports" | sed -n '2p')
+    tcp_port=$(echo "$tcp_ports" | sed -n '1p')
     udp_port=$(echo "$port_list" | awk '/udp/ {print $1}')
 
-    echo "你的vless-reality的TCP端口: $tcp_port1" 
-    echo "你的vmess的TCP端口(设置Argo固定域名端口)：$tcp_port2"
+    echo "你的vless-reality的TCP端口: $tcp_port" 
     echo "你的hysteria2的UDP端口: $udp_port"
 fi
-export vless_port=$tcp_port1
+export vless_port=$tcp_port
 export hy2_port=$udp_port
 }
 

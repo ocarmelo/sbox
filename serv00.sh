@@ -966,32 +966,13 @@ install_keepalive () {
         [[ -z $tg_token ]] && { red "Telegram Bot Token不能为空"; return; }
         green "你设置的Telegram bot token为: ${tg_token}"
     fi
-
-    reading "是否需要保活哪吒探针？(直接回车则不启用)【y/n】: " keep_nezha
-    if [[ "$keep_nezha" == "y" || "$keep_nezha" == "Y" ]]; then
-        reading "请输入哪吒面板域名【v1须带面板端口】：" nezha_server
-        green "你的哪吒面板域名为: $nezha_server"
-
-        if [[ "$nezha_server" != *":"* ]]; then
-          reading "请输入哪吒agent端口(v1请直接回车留空): " nezha_port
-          [[ -z $nezha_port ]] && nezha_port="5555"
-          green "你的哪吒agent端口为: $nezha_port"
-        else
-          nezha_port=""
-        fi
-
-        reading "请输入哪吒v0的agent密钥或v1的NZ_CLIENT_SECRET: " nezha_key
-        [[ -z $nezha_key ]] && { red "哪吒agent密钥不能为空"; return; }
-        green "你的哪吒agent密钥为: $nezha_key"
-    fi
-
     purple "正在安装保活服务中,请稍等......"
     keep_path="$HOME/domains/keep.${USERNAME}.serv00.net/public_nodejs"
     [ -d "$keep_path" ] || mkdir -p "$keep_path"
     app_file_url="https://sb3.ssss.nyc.mn/app.js"
     $COMMAND "${keep_path}/app.js" "$app_file_url"
 
-    cat > ${keep_path}/.env <<EOF
+cat > ${keep_path}/.env <<EOF
 UUID=${UUID}
 SUB_TOKEN=${SUB_TOKEN}
 ${UPLOAD_URL:+API_SUB_URL=$UPLOAD_URL}

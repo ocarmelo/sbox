@@ -439,7 +439,7 @@ fi
 
 get_links(){
 echo -e "\n"
-l_link="vless://$UUID@$IP:$vless_port?encryption=none&flow=xtls-rprx-vision&security=reality&sni=$reym&fp=chrome&pbk=$public_key&type=tcp&headerType=none#PL-$snb-reality"
+vl_link="vless://$UUID@$IP:$vless_port?encryption=none&flow=xtls-rprx-vision&security=reality&sni=$reym&fp=chrome&pbk=$public_key&type=tcp&headerType=none#PL-$snb-reality"
 echo "$vl_link" > jh.txt
 hy2_link="hysteria2://$UUID@$IP:$hy2_port?sni=www.bing.com&alpn=h3&insecure=1#PL-$snb-hy2"
 echo "$hy2_link" >> jh.txt

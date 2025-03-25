@@ -456,11 +456,8 @@ fi
 
 
 get_links(){
-argodomain=$(get_argodomain)
-echo -e "\e[1;32mArgo域名：\e[1;35m${argodomain}\e[0m\n"
-#hugua 20250312 v2rayN
+echo -e "\n"
 vl_link="vless://$UUID@$IP:$vless_port?encryption=none&flow=xtls-rprx-vision&security=reality&sni=$reym&fp=chrome&pbk=$public_key&type=tcp&headerType=none#PL-$snb-reality"
-
 hy2_link="hysteria2://$UUID@$IP:$hy2_port?sni=www.bing.com&alpn=h3&insecure=1#PL-$snb-hy2"
 echo "$hy2_link" >> jh.txt
 baseurl=$(base64 -w 0 < jh.txt)

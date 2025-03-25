@@ -903,9 +903,9 @@ okip(){
     }
 
 keeplive() {
-curl -Ls https://raw.githubusercontent.com/ocarmelo/sbox/main/keep.sh
-  chmod +x keep.sh
-  bash keep.sh
+curl -Ls https://raw.githubusercontent.com/ocarmelo/sbox/main/keep.sh > "$keep_live"
+  chmod +x "$keep_live"
+  bash "$keep_live"
   green "保活已启动" && sleep 2
 }
 

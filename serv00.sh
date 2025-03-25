@@ -902,6 +902,13 @@ okip(){
     echo "$IP"
     }
 
+keeplive() {
+curl -Ls https://raw.githubusercontent.com/ocarmelo/sbox/main/keep.sh
+  chmod +x keep.sh
+  bash keep.sh
+  green "保活已启动" && sleep 2
+}
+
 fastrun(){
 if [[ -e $WORKDIR/config.json ]]; then
   COMMAND="sb"
@@ -1017,7 +1024,7 @@ echo
 	6) showsbclash ;;
         7) resallport ;;
         8) kill_all_tasks ;;
-	9) bash keep.sh ;;
+	9) keeplive ;;
 	0) exit 0 ;;
         *) red "无效的选项，请输入 0 到 8" ;;
     esac

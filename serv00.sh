@@ -1034,8 +1034,7 @@ yellow "Sing-box主进程启动失败，尝试运行下保活网页、重启、�
 fi
 green "多功能主页如下 (支持保活、重启、重置端口、节点查询)"
 purple "http://${snb}.${USERNAME}.serv00.net"
-else
-yellow "未安装 Serv00 脚本！请选择 1 安装"
+
 fi
    echo -e "========================================================="
    reading "请输入选择【0-8】: " choice

@@ -40,8 +40,6 @@ IP=$(head -n 1 ip.txt | awk -F ':' '{print $1}')
 fi
 fi
 fi
-echo "$IP" > $WORKDIR/ipone.txt
-IP=$(<$WORKDIR/ipone.txt)
 green "你选择的IP为: $IP"
 }
 

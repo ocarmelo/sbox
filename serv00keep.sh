@@ -126,19 +126,19 @@ check_port
 fi
 }
 
-check_port(){
+check_port () {
 port_list=$(devil port list)
 tcp_ports=$(echo "$port_list" | grep -c "tcp")
 udp_ports=$(echo "$port_list" | grep -c "udp")
 
 if [[ $tcp_ports -ne 1 || $udp_ports -ne 1 ]]; then
-    echo "端口数量不符合要求，正在调整..."
+    red "端口数量不符合要求，正在调整..."
 
-    if [[ $tcp_ports -gt 2 ]]; then
-        tcp_to_delete=$((tcp_ports - 2))
+    if [[ $tcp_ports -gt 1 ]]; then
+        tcp_to_delete=$((tcp_ports - 1))
         echo "$port_list" | awk '/tcp/ {print $1, $2}' | head -n $tcp_to_delete | while read port type; do
             devil port del $type $port
-            echo "已删除TCP端口: $port"
+            green "已删除TCP端口: $port"
         done
     fi
 
@@ -146,7 +146,7 @@ if [[ $tcp_ports -ne 1 || $udp_ports -ne 1 ]]; then
         udp_to_delete=$((udp_ports - 1))
         echo "$port_list" | awk '/udp/ {print $1, $2}' | head -n $udp_to_delete | while read port type; do
             devil port del $type $port
-            echo "已删除UDP端口: $port"
+            green "已删除UDP端口: $port"
         done
     fi
 
@@ -155,10 +155,10 @@ if [[ $tcp_ports -ne 1 || $udp_ports -ne 1 ]]; then
             tcp_port=$(shuf -i 10000-65535 -n 1) 
             result=$(devil port add tcp $tcp_port 2>&1)
             if [[ $result == *"succesfully"* ]]; then
-                echo "已添加TCP端口: $tcp_port"
+                green "已添加TCP端口: $tcp_port"
                 break
             else
-                echo "端口 $tcp_port 不可用，尝试其他端口..."
+                yellow "端口 $tcp_port 不可用，尝试其他端口..."
             fi
         done
     fi
@@ -168,27 +168,25 @@ if [[ $tcp_ports -ne 1 || $udp_ports -ne 1 ]]; then
             udp_port=$(shuf -i 10000-65535 -n 1) 
             result=$(devil port add udp $udp_port 2>&1)
             if [[ $result == *"succesfully"* ]]; then
-                echo "已添加UDP端口: $udp_port"
+                green "已添加UDP端口: $udp_port"
                 break
             else
-                echo "端口 $udp_port 不可用，尝试其他端口..."
+                yellow "端口 $udp_port 不可用，尝试其他端口..."
             fi
         done
     fi
-    #echo "端口已调整完成,将断开ssh连接"
     sleep 3
-    #devil binexec on >/dev/null 2>&1
-    #kill -9 $(ps -o ppid= -p $$) >/dev/null 2>&1
 else
-    tcp_ports=$(echo "$port_list" | awk '/tcp/ {print $1}')
-    tcp_port=$(echo "$tcp_ports" | sed -n '1p')
+    tcp_port=$(echo "$port_list" | awk '/tcp/ {print $1}' | sed -n '1p')
     udp_port=$(echo "$port_list" | awk '/udp/ {print $1}')
 
-    echo "你的vless-reality的TCP端口: $tcp_port" 
-    echo "你的hysteria2的UDP端口: $udp_port"
+    purple "当前TCP端口: $tcp_port"
+    purple "当前UDP端口: $udp_port"
 fi
 export vless_port=$tcp_port
 export hy2_port=$udp_port
+green "你的vless-reality端口: $vless_port"
+green "你的hysteria2端口: $hy2_port"
 }
 
 download_and_run_singbox() {

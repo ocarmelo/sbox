@@ -13,11 +13,7 @@ USERNAME=$(whoami | tr '[:upper:]' '[:lower:]')
 HOSTNAME=$(hostname)
 WORKDIR="${HOME}/domains/${USERNAME}.serv00.net/logs"
 snb=$(hostname | awk -F '.' '{print $1}')
-
-
 snbok=$snb
-
-
 nb=$(hostname | cut -d '.' -f 1 | tr -d 's')
 devil www add ${USERNAME}.serv00.net php > /dev/null 2>&1
 FILE_PATH="${HOME}/domains/${USERNAME}.serv00.net/public_html"
@@ -812,6 +808,9 @@ $Clashmeta_LINK
 Sing-box订阅分享链接：
 $Singbox_LINK
 -------------------------------------------------------------------------------------------------
+五、 "多功能主页如下 (支持保活、重启、重置端口、节点查询)"
+
+purple "http://${snb}.${USERNAME}.serv00.net" /up是保活，/re是重启，/rp是重置节点端口，/list/你的uuid 是节点及订阅信息
 
 =================================================================================================
 

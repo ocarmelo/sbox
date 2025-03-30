@@ -12,7 +12,7 @@ function runCustomCommand() {
 }
 app.get("/up", (req, res) => {
     runCustomCommand();
-    res.type("html").send("<pre>Serv00-name服务器网页保活启动：Serv00-name！UP！UP！UP！</pre>");
+    res.type("html").send("<pre>服务器网页保活启动：UP！UP！UP！</pre>");
 });
 app.get("/re", (req, res) => {
     const additionalCommands = `
